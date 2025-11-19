@@ -1,4 +1,3 @@
-!pip install qiskit matplotlib --quiet
 import numpy as np
 import matplotlib.pyplot as plt
 from qiskit import QuantumCircuit
@@ -14,14 +13,14 @@ h = 2 * np.pi * hbar
 # Base junction parameters
 # -------------------------
 base_params = [
-    {"C": 10e-15, "R_N": 10e3, "Delta": 200e-6 * e},
-    {"C": 10e-15, "R_N": 10e3, "Delta": 200e-6 * e},
-    {"C": 10e-15, "R_N": 10e3, "Delta": 200e-6 * e},
+    {"C": 20e-15, "R_N": 15e3, "Delta": 200e-6 * e},  # qubit 0
+    {"C": 20e-15, "R_N": 15e3, "Delta": 200e-6 * e},  # qubit 1
+    {"C": 20e-15, "R_N": 15e3, "Delta": 200e-6 * e},  # qubit 2
 ]
 
 # Noise parameters (static Gaussian)
 sigma_EJ = 0.02  # 2% standard deviation
-sigma_EC = 0.02  # 1% standard deviation
+sigma_EC = 0.02  # 2% standard deviation
 rng = np.random.default_rng(42)
 
 
@@ -110,28 +109,28 @@ def plot_sweep(x_values, pairs, detuning_matrix, xlabel, title):
 # Example usage (Qiskit-integrated workflow)
 # -------------------------
 if __name__ == "__main__":
-    print("Running Qiskit-based transmon detuning sweep...")
+    print("Running Qiskit-based transmon detuning sweep with updated parameters...")
 
-    # Sweep C (fF)
-    C_values = np.linspace(5e-15, 20e-15, 100)
+    # Sweep C (fF) from 15 to 25 fF
+    C_values = np.linspace(15e-15, 25e-15, 100)
     pairs, mat_C = sweep_parameter("C", C_values, qubit_idx=0)
     plot_sweep(C_values*1e15, pairs, mat_C,
                "Qubit 0 Capacitance C (fF)",
-               "Effect of Capacitance on Pairwise Detuning")
+               "Effect of Qubit 0 Capacitance on Pairwise Detuning")
 
-    # Sweep Delta (µeV)
-    Delta_values = np.linspace(100e-6*e, 250e-6*e, 100)
+    # Sweep Delta (µeV) from 180 to 220 µeV
+    Delta_values = np.linspace(180e-6*e, 220e-6*e, 100)
     pairs, mat_D = sweep_parameter("Delta", Delta_values, qubit_idx=0)
     plot_sweep(Delta_values/e*1e6, pairs, mat_D,
-               "Qubit 0 Delta (µeV)",
-               "Effect of Δ on Pairwise Detuning")
+               "Qubit 0 Superconducting Energy Gap (µeV)",
+               "Effect of Qubit 0 Superconducting Energy Gap on Pairwise Detuning")
 
-    # Sweep R_N (kΩ)
-    Rn_values = np.linspace(5e3, 25e3, 100)
+    # Sweep R_N (kΩ) from 10 to 20 kΩ
+    Rn_values = np.linspace(10e3, 20e3, 100)
     pairs, mat_R = sweep_parameter("R_N", Rn_values, qubit_idx=0)
     plot_sweep(Rn_values/1e3, pairs, mat_R,
-               "Qubit 0 R_N (kΩ)",
-               "Effect of R_N on Pairwise Detuning")
+               "Qubit 0 Normal State Resistance (kΩ)",
+               "Effect of Qubit 0 Normal State Resistance on Pairwise Detuning")
 
-    print("✅ Sweep complete.")
+    print("✅ Sweep complete with consistent plot titles.")
 
